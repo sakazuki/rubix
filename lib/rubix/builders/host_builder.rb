@@ -19,7 +19,15 @@ module Rubix
     attr_accessor :host
     
     def build
-      self.host = Host.find_or_create(Hash[%w[name visible_name monitored host_groups interfaces templates user_macros].map { |prop| [ prop.to_sym, send(prop) ] }])
+      self.host = (Host.find(name: name) || Host.new(name: name))
+      
+      self.host.visible_name = visible_name
+      self.host.status       = status
+      self.host.host_groups  = host_groups
+      self.host.interfaces   = interfaces
+      self.host.templates    = templates
+      self.host.user_macros  = user_macros
+      self.host.save
     end
 
     #
@@ -34,8 +42,8 @@ module Rubix
       blueprint[:visible_name]
     end
     
-    def monitored
-      blueprint[:monitored]
+    def status
+      blueprint[:status]
     end
     
     #

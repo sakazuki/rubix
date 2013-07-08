@@ -155,6 +155,18 @@ module Rubix
       update_params
     end
 
+    # Update this object in place from the given parameters.
+    #
+    # @param [Hash] hsh
+    def update_attributes! hsh
+      self.class.properties.keys.each do |property|
+        val = (hsh[property] || hsh[property.to_sym])
+        self.send("#{property}=", val) if val
+      end
+      @id = hsh[:id] if hsh[:id]
+      self
+    end
+    
     #
     # == Create ==
     #
@@ -394,7 +406,7 @@ module Rubix
       response = find_request(options)
       case
       when response.has_data?
-        build(response.result.first)
+        obj = build(response.result.first)
       when response.success?
         # doesn't exist
         obj = new(options)

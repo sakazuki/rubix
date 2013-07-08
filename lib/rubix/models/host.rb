@@ -145,34 +145,34 @@ module Rubix
       end
     end
     
-    # def update_params
-    #   create_params.tap do |cp|
-    #     cp.delete(:groups)
-    #     cp.delete(:templates)
-    #     cp.delete(:macros)
-    #     cp.delete(:interfaces)
-    #     cp[id_field] = id
-    #   end
-    # end
+    def update_params
+      create_params.tap do |cp|
+        cp.delete(:groups)
+        cp.delete(:templates)
+        cp.delete(:macros)
+        cp.delete(:interfaces)
+        cp[id_field] = id
+      end
+    end
 
-    # def before_update
-    #   response = request('host.massUpdate', { :interfaces => interface_params, :groups => host_group_params, :templates => template_params, :macros => user_macro_params, :hosts => [{id_field => id}]})
-    #   if response.has_data?
-    #     true
-    #   else
-    #     error("Could not update all interfaces, templates, host groups, and/or macros for #{resource_name}: #{response.error_message}")
-    #     false
-    #   end
-    # end
+    def before_update
+      response = request('host.massUpdate', { :groups => host_group_params, :templates => template_params, :macros => user_macro_params, :hosts => [{id_field => id}]})
+      if response.has_data?
+        true
+      else
+        error("Could not update all interfaces, templates, host groups, and/or macros for #{resource_name}: #{response.error_message}")
+        false
+      end
+    end
     
     def destroy_params
       [{id_field => id}]
     end
 
-    # def before_destroy
-    #   return true if user_macros.nil? || user_macros.empty?
-    #   user_macros.map { |um| um.destroy }.all?
-    # end
+    def before_destroy
+      return true if user_macros.nil? || user_macros.empty?
+      user_macros.map { |um| um.destroy }.all?
+    end
 
     def self.build host
       new({
@@ -182,7 +182,7 @@ module Rubix
             
             :host_group_ids => host['groups'].map { |group| group['groupid'].to_i },
             :template_ids   => host['parentTemplates'].map { |template| (template['templateid'] || template[id_field]).to_i },
-            :user_macros    => host['macros'].map { |um| UserMacro.new(:host_id => um[id_field].to_i, :id => um['hostmacroid'], :value => um['value'], :macro => um['macro']) },
+            :user_macros    => host['macros'].map { |(id, um)| UserMacro.new(:host_id => um[id_field].to_i, :id => um['hostmacroid'], :value => um['value'], :macro => um['macro']) },
             :interfaces     => host['interfaces'].values,
             
             :status         => self::STATUS_NAMES[host['status'].to_i],
