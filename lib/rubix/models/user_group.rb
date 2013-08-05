@@ -17,7 +17,7 @@ module Rubix
     zabbix_attr :name
     zabbix_attr :debug_mode, :default => false
     zabbix_attr :banned,     :default => false
-    zabbix_attr :api_access, :default => :default
+    zabbix_attr :gui_access, :default => :default
 
     def initialize properties={}
       super(properties)
@@ -42,7 +42,7 @@ module Rubix
     def create_params
       {
         :name         => name,
-        :gui_access   => self.class::GUI_ACCESS_CODES[api_access],
+        :gui_access   => self.class::GUI_ACCESS_CODES[gui_access],
         :users_status => (banned ? 1 : 0),
         :debug_mode   => (debug_mode ? 1 : 0)
       }
@@ -79,7 +79,7 @@ module Rubix
       new({
             :id         => user_group[id_field].to_i,
             :name       => user_group['name'],
-            :api_access => self::GUI_ACCESS_NAMES[user_group['gui_access'].to_i],
+            :gui_access => self::GUI_ACCESS_NAMES[user_group['gui_access'].to_i],
             :banned     => (user_group['users_status'].to_i == 1),
             :debug_mode => (user_group['debug_mode'].to_i == 1),
             :user_ids   => user_group['users'].map { |user_info| user_info['userid'].to_i }
