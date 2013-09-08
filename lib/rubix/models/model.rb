@@ -143,7 +143,12 @@ module Rubix
     def validate
       self.class.properties.each_pair do |property, options|
         property_value = self.send property
-        raise ValidationError.new("A #{self.class.resource_name} must have a #{property}") if options[:required] && (property_value.nil? || (!property_value.is_a?(Fixnum) && property_value.empty?))
+        raise ValidationError.new("A #{self.class.resource_name} must have a #{property}") if options[:required] &&
+          (property_value.nil? ||
+           (property_value.kind_of?(String) ||
+            property_value.kind_of?(Array)  ||
+            property_value.kind_of?(Hash)
+           ) && property_value.empty?)
       end
       true
     end

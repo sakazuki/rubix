@@ -118,6 +118,7 @@ module Rubix
     #
 
     def validate
+      super()
       raise ValidationError.new("A host must have at least one host group.") if host_group_ids.nil? || host_group_ids.empty?
       raise ValidationError.new("A host must have at least one interface.")  if interface_ids.nil?  || interfaces.empty?
       true
@@ -156,11 +157,25 @@ module Rubix
     end
 
     def before_update
+      update_interfaces && mass_update
+    end
+
+    def update_interfaces
+      interfaces.each do |interface|
+        unless interface.save
+          error("Could not save interface #{interface.inspect}")
+          return false
+        end
+      end
+      true
+    end
+
+    def mass_update
       response = request('host.massUpdate', { :groups => host_group_params, :templates => template_params, :macros => user_macro_params, :hosts => [{id_field => id}]})
       if response.has_data?
         true
       else
-        error("Could not update all interfaces, templates, host groups, and/or macros for #{resource_name}: #{response.error_message}")
+        error("Could not update all templates, host groups, and/or macros for #{resource_name}: #{response.error_message}")
         false
       end
     end

@@ -20,14 +20,17 @@ module Rubix
     
     def build
       self.host = (Host.find(name: name) || Host.new(name: name))
-      
       self.host.visible_name = visible_name
       self.host.status       = status
       self.host.host_groups  = host_groups
-      self.host.interfaces   = interfaces
       self.host.templates    = templates
       self.host.user_macros  = user_macros
-      self.host.save
+      merge_interfaces!
+      begin
+        self.host.save
+      rescue => e
+        error("Could not build host: #{e.class} -- #{e.message}")
+      end
     end
 
     #
@@ -89,6 +92,18 @@ module Rubix
 
     def interfaces
       (blueprint[:interfaces] || [default_interface]).map { |interface| Interface.new(symbolize_keys(interface)) }
+    end
+
+    def merge_interfaces!
+      interfaces.each do |interface|
+        if matching_interface = host.interfaces.detect do |existing_interface|
+            existing_interface.matches?(interface)
+          end
+          matching_interface.merge!(interface)
+        else
+          host.interfaces = (host.interfaces || []) + [interface]
+        end
+      end
     end
 
     #

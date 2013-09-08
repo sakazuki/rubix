@@ -27,6 +27,18 @@ module Rubix
       self.host          = properties[:host]
     end
 
+    def self.zabbix_name
+      'hostinterface'
+    end
+
+    def self.id_field
+      "interfaceid"
+    end
+
+    def resource_name
+      "#{type} #{self.class.resource_name} #{use_ip ? ip : (dns || ip)}:#{port}"
+    end
+    
     #
     # == Associations ==
     #
@@ -38,8 +50,10 @@ module Rubix
     #
 
     def validate
+      super()
       raise ValidationError.new("An interface must have a host") unless host_id || host
       raise ValidationError.new("Either an IP address or a DNS name must be set") if (ip.nil? || ip.empty?) && (dns.nil? || dns.empty?)
+      true
     end
     
     #
@@ -74,6 +88,29 @@ module Rubix
             :dns                 => interface['dns'],
             :ip                  => interface['ip'],
           })
+    end
+
+    def matches? other
+      self.type.to_s == other.type.to_s &&
+        (
+         (self.type.to_s == 'agent' || self.main) ||
+         (self.port &&
+          self.port == other.port &&
+          (
+           (self.dns &&
+            self.dns == other.dns) ||
+           (self.ip &&
+            self.ip  == other.ip
+            )
+           )
+          )
+        )
+    end
+
+    def merge! other
+      %w[dns ip port use_ip].each do |attr|
+        send("#{attr}=", other.send(attr)) unless other.send(attr).nil?
+      end
     end
     
   end
