@@ -9,6 +9,7 @@ module Rubix
   autoload :Connection,     'rubix/connection'
   autoload :Response,       'rubix/response'
   autoload :Sender,         'rubix/sender'
+  autoload :JavaGateway,    'rubix/java_gateway'
   autoload :Builder,        'rubix/builder'
   autoload :HostBuilder,    'rubix/builders/host_builder'
 
