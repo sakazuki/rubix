@@ -100,6 +100,9 @@ module Rubix
       self.user_macro_ids = properties[:user_macro_ids]
       self.user_macros    = properties[:user_macros]
 
+      self.item_ids       = properties[:item_ids]
+      self.items          = properties[:items]
+
       self.inventory      = properties[:inventory]
     end
 
@@ -112,6 +115,7 @@ module Rubix
     include Associations::HasManyUserMacros
     include Associations::HasManyInterfaces
     include Associations::HasInventory
+    include Associations::HasManyItems
 
     #
     # == Validation == 
@@ -136,7 +140,8 @@ module Rubix
         :groups     => host_group_params,
         :templates  => template_params,
         :macros     => user_macro_params,
-        :interfaces => interface_params
+        :interfaces => interface_params,
+        :items      => item_params
       }.tap do |hp|
         hp[:ipmi_username]  = ipmi_username if ipmi_username
         hp[:ipmi_password]  = ipmi_password if ipmi_password
@@ -152,6 +157,7 @@ module Rubix
         cp.delete(:templates)
         cp.delete(:macros)
         cp.delete(:interfaces)
+        cp.delete(:items)
         cp[id_field] = id
       end
     end
@@ -198,7 +204,8 @@ module Rubix
             :host_group_ids => host['groups'].map { |group| group['groupid'].to_i },
             :template_ids   => host['parentTemplates'].map { |template| (template['templateid'] || template[id_field]).to_i },
             :user_macros    => host['macros'].map { |(id, um)| UserMacro.new(:host_id => um[id_field].to_i, :id => um['hostmacroid'], :value => um['value'], :macro => um['macro']) },
-            :interfaces     => host['interfaces'].values,
+            :interfaces     => host['interfaces'], 
+            :item_ids       => host['items'].map { |item| item['itemid'].to_i }, 
             
             :status         => self::STATUS_NAMES[host['status'].to_i],
             
@@ -229,7 +236,7 @@ module Rubix
     end
     
     def self.get_params
-      super().merge({:selectGroups => :refer, :selectParentTemplates => :refer, :selectInterfaces => :extend, :selectMacros => :extend})
+      super().merge({:selectGroups => :refer, :selectParentTemplates => :refer, :selectInterfaces => :extend, :selectMacros => :extend, :selectItems => :refer})
     end
 
     def self.find_params options={}

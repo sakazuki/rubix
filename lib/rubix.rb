@@ -101,6 +101,9 @@ module Rubix
   # Given an incorrect argument.
   ArgumentError       = Class.new(Error)
 
+  # Incorrect Association
+  AssociationError    = Class.new(Error)
+
   # Incorrect version of Zabbix server
   VersionError        = Class.new(Error)
   

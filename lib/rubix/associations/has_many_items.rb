@@ -1,6 +1,9 @@
 module Rubix
   module Associations
     module HasManyItems
+      def self.included(base)
+        raise AssociationError.new("base(%s) must be a subclass of Rubix::Model" % base) unless base.superclass == Rubix::Model
+      end
       
       def items= is
         return unless is
@@ -11,7 +14,7 @@ module Rubix
       def items
         return @items if @items
         return unless @item_ids
-        @items = @item_ids.map { |iid| Item.find(:id => iid, :host_id => (host_id || template_id)) }
+        @items = @item_ids.map { |iid| Item.find(:id => iid, :host_id => id) }
       end
 
       def item_ids= iids
