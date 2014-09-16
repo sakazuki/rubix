@@ -20,7 +20,7 @@ module Rubix
       :disabled => 1
     }
 
-    zabbix_Define :TYPE, {
+    zabbix_define :TYPE, {
       :single   => 0,
       :multiple => 1
     }

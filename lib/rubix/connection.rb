@@ -131,6 +131,7 @@ module Rubix
       @server = Net::HTTP.new(uri.host, uri.port)
       if @uri.scheme == 'https'
         @server.use_ssl = true
+@server.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
       return @server
     end

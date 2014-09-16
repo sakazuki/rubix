@@ -115,9 +115,9 @@ module Rubix
       # it.
       #
       # @see #create_request
-      def request *args
+      def request args
         self.socket = TCPSocket.new(host, port)
-        send_request(create_request(*args))
+        send_request(create_request(args))
         parsed_response = read_response()
         self.socket.close
         handle_response(parsed_response, *args)
@@ -127,8 +127,8 @@ module Rubix
       # JSON protocol.
       #
       # @return [#to_s]
-      def create_request *args
-        Request.new
+      def create_request args
+        Request.new args
       end
 
       # Send a request.

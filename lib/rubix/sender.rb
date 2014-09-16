@@ -90,19 +90,27 @@ module Rubix
     #
     # @param [Array<Hash>] measurements
     def transmit measurements
-      request *measurements
+      request measurements
     end
     alias_method :<< , :transmit
 
-    # Create a new request for the given measurements.
-    #
+    # Format the given measurement for Zabbix.
     # Sets the host of each measurement to the be +zabbix_host+ for
     # this Sender if it isn't already set.
     #
+    # @param [Hash] measurement
+    # @return [Hash] the modified measurement
+    def format_measurement measurement
+      measurement[:host] ||= zabbix_host
+      measurement
+    end
+
+    # Create a new request for the given measurements.
+    #
     # @param [Array<Hash>] measurements
     # @return [Request]
-    def create_request *measurements
-      Request.new(*measurements.flatten.compact.map { |measurement| measurement[:host] ||= zabbix_host ; measurement })
+    def create_request measurements
+      Request.new([measurements].flatten.compact.map { |measurement| format_measurement(measurement) })
     end
 
     # Logs the status information returned by the Zabbix trapper at

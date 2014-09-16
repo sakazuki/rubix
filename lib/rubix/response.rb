@@ -62,7 +62,7 @@ module Rubix
     #
     # @return [true, false]
     def error?
-      non_200? || (parsed.is_a?(Hash) && parsed['error'])
+      non_200? || (parsed.is_a?(Hash) && parsed['error'] && true)
     end
 
     # Was this response successful?  Successful responses must
@@ -164,7 +164,7 @@ module Rubix
     # @return [true, false]
     def hash?
       return false if error?
-      result.is_a?(Hash) && result.size > 0 && result.first.last
+      result.is_a?(Hash) && result.size > 0 && result.first.last && true
     end
 
     # Is the contents of the *first* element of the +result+ key an
@@ -173,7 +173,7 @@ module Rubix
     # @return [true, false]
     def array?
       return false if error?
-      result.is_a?(Array) && result.size > 0 && result.first
+      result.is_a?(Array) && result.size > 0 && result.first && true
     end
 
     # Is the contents of the +result+ key a String?
