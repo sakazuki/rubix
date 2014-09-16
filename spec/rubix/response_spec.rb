@@ -7,75 +7,101 @@ describe Rubix::Response do
     Rubix::Response.new(double("Net::HTTPResponse instance", code: code.to_s, body: MultiJson.dump({"jsonrpc" => "2.0"}.merge(params))))
   end
 
-  context "a 5xx response" do
+  describe "500" do
     subject { response(500) }
-    its(:non_200?) { should be_true }
-    its(:error?)   { should be_true }
+    it "a 5xx response" do
+      expect(subject.non_200?).to be true
+      expect(subject.error?).to be true
+    end
   end
 
-  context "a 4xx response" do
+  describe "400" do
     subject { response(400) }
-    its(:non_200?) { should be_true }
-    its(:error?)   { should be_true }
+    it "a 4xx response" do
+      expect(subject.non_200?).to be true
+      expect(subject.error?).to be true
+    end
   end
 
-  context "a 200 response" do
+  describe "200" do
     subject { response(200) }
-    its(:non_200?) { should be_false }
-    context "with a result that is" do
-      context "an empty String" do
-        subject { response(200, 'result' => '') }
-        its(:has_data?) { should be_false }
-        its(:string?)   { should be_false }
-        its(:array?)    { should be_false }
-        its(:hash?)     { should be_false }
+    it "a 200 response" do
+p subject
+      expect(subject.non_200?).to be false
+    end
+    describe "with a result that is" do
+      subject { response(200, 'result' => '') }
+      it "an empty String" do
+p subject
+        expect(subject.has_data?).to be false
+        expect(subject.string?).to be false
+        expect(subject.array?).to be false
+        expect(subject.hash?).to be false
       end
-      context "an empty Array" do
-        subject { response(200, 'result' => []) }
-        its(:has_data?) { should be_false }
-        its(:string?)   { should be_false }
-        its(:array?)    { should be_false }
-        its(:hash?)     { should be_false }
+    end
+    describe "with a result that is" do
+      subject { response(200, 'result' => []) }
+      it "an empty Array" do
+p subject
+        expect(subject.has_data?).to be false
+        expect(subject.string?).to be false
+        expect(subject.array?).to be false
+        expect(subject.hash?).to be false
       end
-      context "an empty Hash" do
-        subject { response(200, 'result' => {}) }
-        its(:has_data?) { should be_false }
-        its(:string?)   { should be_false }
-        its(:array?)    { should be_false }
-        its(:hash?)     { should be_false }
+    end
+    describe "with a result that is" do
+      subject { response(200, 'result' => {}) }
+      it "an empty Hash" do
+p subject
+        expect(subject.has_data?).to be false
+        expect(subject.string?).to be false
+        expect(subject.array?).to be false
+        expect(subject.hash?).to be false
       end
-      context "a String" do
-        subject { response(200, 'result' => 'hello there') }
-        its(:has_data?) { should be_true }
-        its(:string?)   { should be_true  }
-        its(:array?)    { should be_false }
-        its(:hash?)     { should be_false }
-        its(:result)    { should == 'hello there' }
+    end
+    describe "with a result that is" do
+      subject { response(200, 'result' => 'hello there') }
+      it "a String" do
+p subject
+        expect(subject.has_data?).to be true
+        expect(subject.string?).to be true
+        expect(subject.array?).to be false
+        expect(subject.hash?).to be false
+        expect(subject.result).to eq('hello there')
       end
-      context "an Array" do
-        subject { response(200, 'result' => ['hello', 'there']) }
-        its(:has_data?) { should be_true }
-        its(:string?)   { should be_false }
-        its(:array?)    { should be_true  }
-        its(:hash?)     { should be_false }
-        its(:result)    { should == [ 'hello', 'there' ] }
+    end
+    describe "with a result that is" do
+      subject { response(200, 'result' => ['hello', 'there']) }
+      it "an Array" do
+p subject
+        expect(subject.has_data?).to be true
+        expect(subject.string?).to be false
+        expect(subject.array?).to be true
+        expect(subject.hash?).to be false
+        expect(subject.result).to eq([ 'hello', 'there' ])
       end
-      context "a Hash" do
-        subject { response(200, 'result' => {'hello' => 'there'}) }
-        its(:has_data?) { should be_true  }
-        its(:string?)   { should be_false }
-        its(:array?)    { should be_false }
-        its(:hash?)     { should be_true  }
-        its(:result)    { should == { 'hello' => 'there' } }
+    end
+    describe "with a result that is" do
+      subject { response(200, 'result' => {'hello' => 'there'}) }
+      it "a Hash" do
+p subject
+        expect(subject.has_data?).to be true
+        expect(subject.string?).to be false
+        expect(subject.array?).to be false
+        expect(subject.hash?).to be true
+        expect(subject.result).to eq({ 'hello' => 'there' })
       end
-      context "with an error message" do
-        subject { response(200, 'error' => { 'message' => 'foobar'}) }
-        its(:has_data?) { should be_false }
-        its(:string?)   { should be_false }
-        its(:array?)    { should be_false }
-        its(:hash?)     { should be_false }
-        its(:error?)    { should be_true }
-        its(:error_message) { should == 'foobar' }
+    end
+    describe "with a result that is" do
+      subject { response(200, 'error' => { 'message' => 'foobar'}) }
+      it "with an error message" do
+p subject
+        expect(subject.has_data?).to be false
+        expect(subject.string?).to be false
+        expect(subject.array?).to be false
+        expect(subject.hash?).to be false
+        expect(subject.error?).to be true
+        expect(subject.error_message).to eq('foobar')
       end
     end
   end

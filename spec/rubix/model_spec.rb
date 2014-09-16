@@ -12,29 +12,29 @@ describe Rubix::Model do
 
   it "can define attributes" do
     @model = @model_wrapper.new
-    @model.snap.should be_nil
+    expect(@model.snap).to be_nil
     @model.snap = 3
-    @model.snap.should == 3
+    expect(@model.snap).to eq(3)
   end
 
   it "can define attributes with defaults" do
-    @model_wrapper.new.crackle.should == 'how'
+    expect(@model_wrapper.new.crackle).to eq('how')
   end
 
   it "can define required attributs" do
-    lambda { @model_wrapper.new.validate }.should raise_error(Rubix::ValidationError)
+    expect { @model_wrapper.new.validate }.to raise_error(Rubix::ValidationError)
   end
 
   it "will define a lookup hash for translating between names and integer codes" do
-    @model_wrapper::FOO_CODES[:bar].should  == 0
-    @model_wrapper::FOO_CODES[:booz].should == 1
-    @model_wrapper::FOO_NAMES[0].should     == :bar
-    @model_wrapper::FOO_NAMES[1].should     == :booz
+    expect(@model_wrapper::FOO_CODES[:bar]).to eq(0)
+    expect(@model_wrapper::FOO_CODES[:booz]).to eq(1)
+    expect(@model_wrapper::FOO_NAMES[0]).to eq(:bar)
+    expect(@model_wrapper::FOO_NAMES[1]).to eq(:booz)
   end
 
   it "will define a lookup hash that acts as a Mash when looking up names to codes" do
-    @model_wrapper::FOO_CODES[:bar].should   == 0
-    @model_wrapper::FOO_CODES['bar'].should  == 0
+    expect(@model_wrapper::FOO_CODES[:bar]).to eq(0)
+    expect(@model_wrapper::FOO_CODES['bar']).to eq(0)
   end
 
 end

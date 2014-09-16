@@ -1,4 +1,5 @@
-require 'rspec/autorun'
+require 'rspec'
+require 'rspec/its'
 require 'tempfile'
 
 RUBIX_ROOT = File.expand_path(__FILE__, '../../lib')
