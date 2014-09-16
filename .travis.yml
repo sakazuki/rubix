@@ -10,3 +10,7 @@ bundler_args: --without docs support
 
 notifications:
   email: false
+
+branches:
+  only:
+    - for_zabbix_2_2
