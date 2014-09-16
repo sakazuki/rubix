@@ -18,9 +18,13 @@ task :cov do
   Rake::Task[:rspec].execute
 end
 
-require 'yard'
-YARD::Rake::YardocTask.new do
-  Bundler.setup(:default, :development, :docs)
+begin
+  require 'yard'
+  YARD::Rake::YardocTask.new do
+    Bundler.setup(:default, :development, :docs)
+  end
+rescue LoadError => e
+  p e 
 end
 
 desc "Build rubix"
