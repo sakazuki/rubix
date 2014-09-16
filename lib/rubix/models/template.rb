@@ -16,6 +16,10 @@ module Rubix
 
       self.host_group_ids = properties[:host_group_ids]
       self.host_groups    = properties[:host_groups]
+
+      self.item_ids       = properties[:item_ids]
+      self.items          = properties[:items]
+
     end
 
     #
@@ -34,6 +38,7 @@ module Rubix
 
     include Associations::HasManyHosts
     include Associations::HasManyHostGroups
+    include Associations::HasManyItems
 
     #
     # == CRUD ==
@@ -52,7 +57,7 @@ module Rubix
     end
 
     def self.get_params
-      super().merge(:selectGroups => :refer, :selectHosts => :refer)
+      super().merge(:selectGroups => :refer, :selectHosts => :refer, :selectItems => :refer)
     end
 
     def self.find_params options={}
@@ -64,7 +69,8 @@ module Rubix
             :id       => (template[id_field] || template['hostid']).to_i,
             :name     => template['host'],
             :host_ids => template['hosts'].map { |host_info| host_info['hostid'].to_i },
-            :host_group_ids => template['groups'].map { |group| group['groupid'].to_i }
+            :host_group_ids => template['groups'].map { |group| group['groupid'].to_i },
+            :item_ids       => template['items'].map { |item| item['itemid'].to_i }
           })
     end
 

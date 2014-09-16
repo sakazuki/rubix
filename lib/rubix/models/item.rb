@@ -184,8 +184,8 @@ module Rubix
     def self.find_params options={}
       super().merge({
                       :filter => {
-                        :key_ => options[:key],
-                        :id   => options[:id]
+                        :key_     => options[:key],
+                        id_field  => options[:id]
                       }
                     }.tap do |o|
                       o[:hostids] = [options[:host_id]] if options[:host_id]
