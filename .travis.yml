@@ -6,7 +6,10 @@ rvm:
   - jruby-19mode # JRuby in 1.9 mode
   - rbx-19mode
 
-bundler_args: --without docs support
+gemfile:
+  - Gemfile
+
+bundler_args: --without support
 
 notifications:
   email: false
