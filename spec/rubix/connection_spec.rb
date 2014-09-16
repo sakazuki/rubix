@@ -5,13 +5,13 @@ describe Rubix::Connection do
   let(:server)                 { double("Net::HTTP instance") }
   let(:server_api_version)     { '1.4'                        }
 
-  let(:generic_response)       { double("Net::HTTP::Response instance", code: 200, body: '{"result": "foo"}')        }
+  let(:generic_response)       { double("Net::HTTP::Response instance", :code => 200, :body => '{"result": "foo"}')        }
   
-  let(:auth_success_response)  { double("Net::HTTP::Response instance", code: 200, body: '{"result": "auth_token"}') }
-  let(:auth_failure_response)  { double("Net::HTTP::Response instance", code: 200, body: '{"error":{"code":-32602,"message":"Invalid params.","data":"Not authorized"}}') }
+  let(:auth_success_response)  { double("Net::HTTP::Response instance", :code => 200, :body => '{"result": "auth_token"}') }
+  let(:auth_failure_response)  { double("Net::HTTP::Response instance", :code => 200, :body => '{"error":{"code":-32602,"message":"Invalid params.","data":"Not authorized"}}') }
   
-  let(:supported_version_response)   { double("Net::HTTP::Response instance", code: 200, body: '{"result": "1.4"}') }
-  let(:unsupported_version_response) { double("Net::HTTP::Response instance", code: 200, body: '{"result": "1.3"}') }
+  let(:supported_version_response)   { double("Net::HTTP::Response instance", :code => 200, :body => '{"result": "1.4"}') }
+  let(:unsupported_version_response) { double("Net::HTTP::Response instance", :code => 200, :body => '{"result": "1.3"}') }
 
   let(:connection) { Rubix::Connection.new('localhost/api.php', 'username', 'password') }
   subject { connection }
