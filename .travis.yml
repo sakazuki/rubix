@@ -9,7 +9,7 @@ rvm:
 gemfile:
   - Gemfile
 
-bundler_args: --without support
+bundler_args: --without docs support
 
 notifications:
   email: false
