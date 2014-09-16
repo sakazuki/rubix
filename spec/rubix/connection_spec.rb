@@ -20,10 +20,10 @@ describe Rubix::Connection do
   end
 
   context "before making any requests" do
-    its(:request_id) { should == 0 }
     it "sends an authorization request" do
       allow(server).to receive(:request).and_return(auth_success_response)
       allow(connection).to receive(:authorize!)
+      expect(subject.request_id).to eq(0)
       connection.request('foobar', {})
     end
     context "having received a failed authorization response" do
@@ -33,22 +33,20 @@ describe Rubix::Connection do
       end
     end
     context "having received a successful authorization response" do
-      before { allow(server).to receive(:request).and_return(auth_success_response) }
       it "sends a version check request" do
-        allow(server).to receive(:request).and_return(supported_version_response, generic_response)
-        connection.request('foobar', {})
+        allow(server).to receive(:request).and_return(auth_success_response, supported_version_response, generic_response)
+        expect { connection.request('foobar', {}) }.not_to raise_error
       end
       context "having rejected the server API version" do
-        before { allow(server).to receive(:request).and_return(unsupported_version_response) }
+        before { allow(server).to receive(:request).and_return(auth_success_response, unsupported_version_response) }
         it "throws a VersionError" do
           expect { connection.request('foobar', {}) }.to raise_error(Rubix::VersionError)
         end
       end
       context "having verified it supports the server API version" do
-        before { allow(server).to receive(:request).and_return(supported_version_response) }
         it "sends the actual request" do
-          allow(server).to receive(:request).and_return(generic_response)
-          connection.request('foobar', {})
+          allow(server).to receive(:request).and_return(auth_success_response, supported_version_response, generic_response)
+          expect { connection.request('foobar', {}) }.not_to raise_error
         end
       end
     end
@@ -59,18 +57,19 @@ describe Rubix::Connection do
       allow(server).to receive(:request).and_return(auth_success_response, supported_version_response, generic_response)
       connection.request('foobar', {})
     end
-    its(:request_id) { should == 3 }
     it "should not send any authentication or version check requests" do
       allow(server).to receive(:request).and_return(generic_response)
-      allow(connection).not_to receive(:authorize!)
-      allow(connection).not_to receive(:check_version!)
+      expect(connection).not_to receive(:authorize!)
+      expect(connection).not_to receive(:check_version!)
       connection.request('foobar', {})
+      expect(subject.request_id).to eq(4)
     end
     context "upon receiving a 'Not authorized' response" do
       before { allow(server).to receive(:request).and_return(auth_failure_response) }
       it "authorizes again and repeats the request" do
         allow(server).to receive(:request).and_return(auth_success_response, generic_response)
         connection.request('foobar', {})
+        expect(subject.request_id).to eq(4)
       end
     end
   end

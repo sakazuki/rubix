@@ -166,7 +166,7 @@ module Rubix
     #
     # @return [true, false]
     def support_server_version?
-      Gem::Version.new(api_version) > Gem::Version.new('1.4.0')
+      Gem::Version.new(api_version) >= Gem::Version.new('1.4.0')
     end
 
     protected

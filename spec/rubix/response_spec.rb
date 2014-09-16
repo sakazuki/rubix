@@ -26,13 +26,11 @@ describe Rubix::Response do
   describe "200" do
     subject { response(200) }
     it "a 200 response" do
-p subject
       expect(subject.non_200?).to be false
     end
     describe "with a result that is" do
       subject { response(200, 'result' => '') }
       it "an empty String" do
-p subject
         expect(subject.has_data?).to be false
         expect(subject.string?).to be false
         expect(subject.array?).to be false
@@ -42,7 +40,6 @@ p subject
     describe "with a result that is" do
       subject { response(200, 'result' => []) }
       it "an empty Array" do
-p subject
         expect(subject.has_data?).to be false
         expect(subject.string?).to be false
         expect(subject.array?).to be false
@@ -52,7 +49,6 @@ p subject
     describe "with a result that is" do
       subject { response(200, 'result' => {}) }
       it "an empty Hash" do
-p subject
         expect(subject.has_data?).to be false
         expect(subject.string?).to be false
         expect(subject.array?).to be false
@@ -62,7 +58,6 @@ p subject
     describe "with a result that is" do
       subject { response(200, 'result' => 'hello there') }
       it "a String" do
-p subject
         expect(subject.has_data?).to be true
         expect(subject.string?).to be true
         expect(subject.array?).to be false
@@ -73,7 +68,6 @@ p subject
     describe "with a result that is" do
       subject { response(200, 'result' => ['hello', 'there']) }
       it "an Array" do
-p subject
         expect(subject.has_data?).to be true
         expect(subject.string?).to be false
         expect(subject.array?).to be true
@@ -84,7 +78,6 @@ p subject
     describe "with a result that is" do
       subject { response(200, 'result' => {'hello' => 'there'}) }
       it "a Hash" do
-p subject
         expect(subject.has_data?).to be true
         expect(subject.string?).to be false
         expect(subject.array?).to be false
@@ -95,7 +88,6 @@ p subject
     describe "with a result that is" do
       subject { response(200, 'error' => { 'message' => 'foobar'}) }
       it "with an error message" do
-p subject
         expect(subject.has_data?).to be false
         expect(subject.string?).to be false
         expect(subject.array?).to be false
