@@ -21,6 +21,7 @@ group :test do
   gem 'rspec'
   gem 'simplecov',   ">= 0.5",   :platform => [:ruby_19],   :require => false
   gem 'rspec-its'
+  gem 'yard'
 end
 
 # Split out database access gems because some devs only work on one or
