@@ -7,19 +7,6 @@ module Rubix
     INTEGRATION_GROUP    = 'rubix_spec_group'
     INTEGRATION_PASSWORD = 'rubix'
 
-=begin
-    def self.integration_config
-      @integration_config
-    end
-    def self.integration_config= config
-      @integration_config = config
-    end
-    
-      return @integration_config if @integration_config
-=end 
-      
-      
-
     # Parse the information we need to find the database and Zabbix
     # server we're going to need for any integration tests.  Also set
     # a global variable for easy use of this information when testing.
