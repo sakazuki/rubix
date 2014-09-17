@@ -7,6 +7,7 @@ module Rubix
     INTEGRATION_GROUP    = 'rubix_spec_group'
     INTEGRATION_PASSWORD = 'rubix'
 
+=begin
     def self.integration_config
       @integration_config
     end
@@ -15,7 +16,7 @@ module Rubix
     end
     
       return @integration_config if @integration_config
-      
+=end 
       
       
 
@@ -51,7 +52,8 @@ module Rubix
       require 'yaml'
       test_data = YAML.load(open(test_yml_path))
       return if test_data['disable_integration_tests']
-      self.integration_config = test_data
+      #self.integration_config = test_data
+      $CONFIG = test_data
     end
 
     def self.connect_to_database

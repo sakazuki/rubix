@@ -15,6 +15,9 @@ module Rubix
         require 'mysql2'
         @conn = Mysql2::Client.new(:host => config['mysql']['host'], :username => config['mysql']['username'], :password => config['mysql']['password'],
                                    :database => config['mysql']['database'])
+      elsif config['sqlite']
+        require 'sqlite3'
+        @conn = SQLite3::Database.new(config['sqlite']['database'])
       end
       @result = true
     rescue => e

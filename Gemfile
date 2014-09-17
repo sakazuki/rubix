@@ -27,6 +27,7 @@ end
 # the other.
 group(:mysql) { gem 'mysql2' }
 group(:pg)    { gem 'pg'     }
+group(:sqlite){ gem 'sqlite3' }
 
 # Gems you would use if hacking on this gem (rather than with it)
 group :support do
