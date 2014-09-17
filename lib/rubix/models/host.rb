@@ -16,8 +16,8 @@ module Rubix
       :proxy_passive => 6
     }
 
-    # The numeric codes for the various availability types.
-    zabbix_define :AVAILABILITY, {
+    # The numeric codes for the various available types.
+    zabbix_define :AVAILABLE, {
       :unknown      => 0,
       :available    => 1,
       :unavailable  => 2
@@ -55,19 +55,19 @@ module Rubix
 
     # Read-only.  Will be read on 'build' but not transmitted on
     # 'create' or 'update'.
-    zabbix_attr :availability
+    zabbix_attr :available
     zabbix_attr :disable_until
     zabbix_attr :error_msg
     zabbix_attr :errors_from
-    zabbix_attr :ipmi_availability
+    zabbix_attr :ipmi_available
     zabbix_attr :ipmi_disable_until
     zabbix_attr :ipmi_error
     zabbix_attr :ipmi_errors_from
-    zabbix_attr :jmx_availability
+    zabbix_attr :jmx_available
     zabbix_attr :jmx_disable_until
     zabbix_attr :jmx_error
     zabbix_attr :jmx_errors_from
-    zabbix_attr :snmp_availability
+    zabbix_attr :snmp_available
     zabbix_attr :snmp_disable_until
     zabbix_attr :snmp_error
     zabbix_attr :snmp_errors_from
@@ -203,7 +203,7 @@ module Rubix
             
             :host_group_ids => host['groups'].map { |group| group['groupid'].to_i },
             :template_ids   => host['parentTemplates'].map { |template| (template['templateid'] || template[id_field]).to_i },
-            :user_macros    => host['macros'].map { |(id, um)| UserMacro.new(:host_id => um[id_field].to_i, :id => um['hostmacroid'], :value => um['value'], :macro => um['macro']) },
+            :user_macros    => host['macros'].map { |um| UserMacro.new(:host_id => um[id_field].to_i, :id => um['hostmacroid'], :value => um['value'], :macro => um['macro']) },
             :interfaces     => host['interfaces'], 
             :item_ids       => host['items'].map { |item| item['itemid'].to_i }, 
             
@@ -215,19 +215,19 @@ module Rubix
             :ipmi_privilege => self::IPMI_PRIVILEGE_NAMES[host['ipmi_privilege'].to_i],
 
 
-            :availability       => self::AVAILABILITY_NAMES[host['availability'].to_i],
+            :available          => self::AVAILABLE_NAMES[host['available'].to_i],
             :disable_until      => host['disable_until'].to_i,
             :error_msg          => host['error'],
             :errors_from        => host['errors_from'].to_i,
-            :ipmi_availability  => self::AVAILABILITY_NAMES[host['ipmi_availability'].to_i],
+            :ipmi_available     => self::AVAILABLE_NAMES[host['ipmi_available'].to_i],
             :ipmi_disable_until => host['ipmi_disable_until'].to_i,
             :ipmi_error         => host['ipmi_error'],
             :ipmi_errors_from   => host['ipmi_errors_from'].to_i,
-            :jmx_availability   => self::AVAILABILITY_NAMES[host['jmx_availability'].to_i],
+            :jmx_available      => self::AVAILABLE_NAMES[host['jmx_available'].to_i],
             :jmx_disable_until  => host['jmx_disable_until'].to_i,
             :jmx_error          => host['jmx_error'],
             :jmx_errors_from    => host['jmx_errors_from'].to_i,
-            :snmp_availability  => self::AVAILABILITY_NAMES[host['snmp_availability'].to_i],
+            :snmp_available     => self::AVAILABLE_NAMES[host['snmp_available'].to_i],
             :snmp_disable_until => host['snmp_disable_until'].to_i,
             :snmp_error         => host['snmp_error'],
             :snmp_errors_from   => host['snmp_errors_from'].to_i,
