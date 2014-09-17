@@ -4,7 +4,7 @@ describe Rubix::Sender do
 
   subject { Rubix::Sender.new(:zabbix_host => "localhost") }
   
-  let(:measurement) { { key: 'question.life.universe.everything', value: 42 } }
+  let(:measurement) { { :key => 'question.life.universe.everything', :value => 42 } }
 
   it "has sensible defaults" do
     expect(subject.host).to eq(Rubix::Sender::DEFAULT_HOST)

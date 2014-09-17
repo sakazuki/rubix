@@ -4,7 +4,7 @@ require 'multi_json'
 describe Rubix::Response do
 
   def response code, params={}
-    Rubix::Response.new(double("Net::HTTPResponse instance", code: code.to_s, body: MultiJson.dump({"jsonrpc" => "2.0"}.merge(params))))
+    Rubix::Response.new(double("Net::HTTPResponse instance", :code => code.to_s, :body => MultiJson.dump({"jsonrpc" => "2.0"}.merge(params))))
   end
 
   describe "500" do
